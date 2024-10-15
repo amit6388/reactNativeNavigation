@@ -1,60 +1,21 @@
 import React from 'react';
-import { Button, Text, View, StyleSheet } from 'react-native';
+import { Text, View, StyleSheet } from 'react-native';
 import { NavigationContainer } from '@react-navigation/native';
-import { createStackNavigator } from '@react-navigation/stack';
+import { createMaterialTopTabNavigator } from '@react-navigation/material-top-tabs';
 
-// Define the types for the routes
-type RootStackParamList = {
-  Home: undefined;
-  Details: undefined;
-  ProfileStack: undefined; // Stack for Profile pages
-  Profile: undefined;
-  Settings: undefined;
-};
-
-// Create the main stack navigator
-const Stack = createStackNavigator<RootStackParamList>();
+// Create the tab navigator
+const Tab = createMaterialTopTabNavigator();
 
 // Home Screen Component
-const HomeScreen = ({ navigation }: any) => {
+const HomeScreen = () => {
   return (
     <View style={styles.container}>
       <Text style={styles.title}>Welcome to the Home Screen</Text>
-      <Button
-        title="Go to Details"
-        onPress={() => navigation.navigate('Details')}
-      />
-      <Button
-        title="Go to Profile"
-        onPress={() => navigation.navigate('ProfileStack')}
-      />
     </View>
   );
 };
 
-// Details Screen Component
-const DetailsScreen = () => {
-  return (
-    <View style={styles.container}>
-      <Text style={styles.title}>Details Screen</Text>
-    </View>
-  );
-};
-
-// Profile Screen (Inside Nested Stack)
-const ProfileScreen = ({ navigation }: any) => {
-  return (
-    <View style={styles.container}>
-      <Text style={styles.title}>Profile Screen</Text>
-      <Button
-        title="Go to Settings"
-        onPress={() => navigation.navigate('Settings')}
-      />
-    </View>
-  );
-};
-
-// Settings Screen (Inside Nested Stack)
+// Settings Screen Component
 const SettingsScreen = () => {
   return (
     <View style={styles.container}>
@@ -63,32 +24,70 @@ const SettingsScreen = () => {
   );
 };
 
-// Nested Stack Navigator for Profile section
-const ProfileStackNavigator = () => {
-  const ProfileStack = createStackNavigator();
+// Another Example Screen Component
+const ProfileScreen = () => {
   return (
-    <ProfileStack.Navigator initialRouteName="Profile">
-      <ProfileStack.Screen name="Profile" component={ProfileScreen} />
-      <ProfileStack.Screen name="Settings" component={SettingsScreen} />
-    </ProfileStack.Navigator>
+    <View style={styles.container}>
+      <Text style={styles.title}>Profile Screen</Text>
+    </View>
   );
 };
 
-// Main StackNavigation Component with Nested Navigation
-const StackNavigation: React.FC = () => {
+// Main Tab Navigation Component
+function MyTabs() {
+  return (
+    <Tab.Navigator
+      screenOptions={{
+        tabBarStyle: {
+          backgroundColor: '#6200ee', // Purple background for the tab bar
+        },
+        tabBarActiveTintColor: '#ffffff', // White color for active tab text
+        tabBarInactiveTintColor: '#b0bec5', // Light gray for inactive tab text
+        tabBarLabelStyle: {
+          fontWeight: 'bold', // Bold text for tab labels
+          fontSize: 16, // Font size for tab labels
+        },
+        tabBarIndicatorStyle: {
+          backgroundColor: '#03dac6', // Teal color for the tab indicator
+          height: 4, // Height of the tab indicator
+        },
+      }}
+    >
+      <Tab.Screen
+        name="Home"
+        component={HomeScreen}
+        options={{
+          tabBarLabel: 'Home',
+          tabBarAccessibilityLabel: 'Home Tab',
+        }}
+      />
+      <Tab.Screen
+        name="Settings"
+        component={SettingsScreen}
+        options={{
+          tabBarLabel: 'Settings',
+          tabBarAccessibilityLabel: 'Settings Tab',
+        }}
+      />
+      <Tab.Screen
+        name="Profile"
+        component={ProfileScreen}
+        options={{
+          tabBarLabel: 'Profile',
+          tabBarAccessibilityLabel: 'Profile Tab',
+        }}
+      />
+    </Tab.Navigator>
+  );
+}
+
+// Main App Component with Navigation Container
+const App: React.FC = () => {
   return (
     <NavigationContainer>
-      <Stack.Navigator initialRouteName="Home">
-        <Stack.Screen name="Home" component={HomeScreen} />
-        <Stack.Screen name="Details" component={DetailsScreen} />
-        <Stack.Screen
-          name="ProfileStack"
-          component={ProfileStackNavigator}
-          options={{ headerShown: false }} // Hide header for nested stack
-        />
-      </Stack.Navigator>
+      <MyTabs />
     </NavigationContainer>
-  ); 
+  );
 };
 
 // Styling for a more attractive UI
@@ -98,15 +97,15 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     alignItems: 'center',
     backgroundColor: '#f5f5f5',
+    padding: 20, // Add padding to container
   },
   title: {
     fontSize: 24,
     fontWeight: 'bold',
     marginBottom: 20,
-  },
-  button: {
-    marginVertical: 10,
+    color: '#333', // Darker text color for title
   },
 });
 
-export default StackNavigation;
+export default App;
+//okkk

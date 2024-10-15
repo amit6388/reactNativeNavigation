@@ -1,59 +1,21 @@
-// npm install @react-navigation/bottom-tabs
 import React from 'react';
-import { Button, Text, View, StyleSheet } from 'react-native';
+import { Text, View, StyleSheet } from 'react-native';
 import { NavigationContainer } from '@react-navigation/native';
-import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
-import { createStackNavigator } from '@react-navigation/stack';
+import { createMaterialTopTabNavigator } from '@react-navigation/material-top-tabs';
 
-// Define the types for the routes
-type RootStackParamList = {
-  Home: undefined;
-  Details: undefined;
-  ProfileStack: undefined; // Stack for Profile pages
-  Profile: undefined;
-  Settings: undefined;
-};
-
-// Create the main stack and tab navigators
-const Stack = createStackNavigator<RootStackParamList>();
-const Tab = createBottomTabNavigator();
+// Create the tab navigator
+const Tab = createMaterialTopTabNavigator();
 
 // Home Screen Component
-const HomeScreen = ({ navigation }: any) => {
+const HomeScreen = () => {
   return (
     <View style={styles.container}>
       <Text style={styles.title}>Welcome to the Home Screen</Text>
-      <Button
-        title="Go to Details"
-        onPress={() => navigation.navigate('Details')}
-      />
     </View>
   );
 };
 
-// Details Screen Component
-const DetailsScreen = () => {
-  return (
-    <View style={styles.container}>
-      <Text style={styles.title}>Details Screen</Text>
-    </View>
-  );
-};
-
-// Profile Screen (Inside Nested Stack)
-const ProfileScreen = ({ navigation }: any) => {
-  return (
-    <View style={styles.container}>
-      <Text style={styles.title}>Profile Screen</Text>
-      <Button
-        title="Go to Settings"
-        onPress={() => navigation.navigate('Settings')}
-      />
-    </View>
-  );
-};
-
-// Settings Screen (Inside Nested Stack)
+// Settings Screen Component
 const SettingsScreen = () => {
   return (
     <View style={styles.container}>
@@ -62,36 +24,68 @@ const SettingsScreen = () => {
   );
 };
 
-// Nested Stack Navigator for Profile section
-const ProfileStackNavigator = () => {
+// Another Example Screen Component
+const ProfileScreen = () => {
   return (
-    <Stack.Navigator initialRouteName="Profile">
-      <Stack.Screen name="Profile" component={ProfileScreen} />
-      <Stack.Screen name="Settings" component={SettingsScreen} />
-    </Stack.Navigator>
+    <View style={styles.container}>
+      <Text style={styles.title}>Profile Screen</Text>
+    </View>
   );
 };
 
 // Main Tab Navigation Component
-const TabNavigation: React.FC = () => {
+function MyTabs() {
   return (
-    <Tab.Navigator>
-      <Tab.Screen name="Home" component={HomeScreen} />
-      <Tab.Screen name="Details" component={DetailsScreen} />
+    <Tab.Navigator
+      screenOptions={{
+        tabBarStyle: {
+          backgroundColor: '#6200ee', // Purple background for the tab bar
+        },
+        tabBarActiveTintColor: '#ffffff', // White color for active tab text
+        tabBarInactiveTintColor: '#b0bec5', // Light gray for inactive tab text
+        tabBarLabelStyle: {
+          fontWeight: 'bold', // Bold text for tab labels
+          fontSize: 16, // Font size for tab labels
+        },
+        tabBarIndicatorStyle: {
+          backgroundColor: '#03dac6', // Teal color for the tab indicator
+          height: 4, // Height of the tab indicator
+        },
+      }}
+    >
       <Tab.Screen
-        name="ProfileStack"
-        component={ProfileStackNavigator}
-        options={{ headerShown: false }} // Hide header for nested stack
+        name="Home"
+        component={HomeScreen}
+        options={{
+          tabBarLabel: 'Home',
+          tabBarAccessibilityLabel: 'Home Tab',
+        }}
+      />
+      <Tab.Screen
+        name="Settings"
+        component={SettingsScreen}
+        options={{
+          tabBarLabel: 'Settings',
+          tabBarAccessibilityLabel: 'Settings Tab',
+        }}
+      />
+      <Tab.Screen
+        name="Profile"
+        component={ProfileScreen}
+        options={{
+          tabBarLabel: 'Profile',
+          tabBarAccessibilityLabel: 'Profile Tab',
+        }}
       />
     </Tab.Navigator>
-  ); 
-};
+  );
+}
 
 // Main App Component with Navigation Container
 const App: React.FC = () => {
   return (
     <NavigationContainer>
-      <TabNavigation />
+      <MyTabs />
     </NavigationContainer>
   );
 };
@@ -103,14 +97,13 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     alignItems: 'center',
     backgroundColor: '#f5f5f5',
+    padding: 20, // Add padding to container
   },
   title: {
     fontSize: 24,
     fontWeight: 'bold',
     marginBottom: 20,
-  },
-  button: {
-    marginVertical: 10,
+    color: '#333', // Darker text color for title
   },
 });
 
